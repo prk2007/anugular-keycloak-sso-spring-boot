@@ -70,6 +70,7 @@ public class SecurityConfig {
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverterForKeycloak());
 
         http.authorizeRequests()
+                .antMatchers("/actuator/health/**").permitAll()
                 .anyRequest()
                     .hasRole("user");
 
