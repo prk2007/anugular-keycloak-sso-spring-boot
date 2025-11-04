@@ -4,12 +4,42 @@ import {RouterModule, Routes} from "@angular/router";
 import {AccessDeniedComponent} from "./access-denied/access-denied.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {UserInfoComponent} from "./user-info/user-info.component";
+import {HomeComponent} from "./home/home.component";
+import {UserDashboardComponent} from "./user-dashboard/user-dashboard.component";
+import {AdminDashboardComponent} from "./admin-dashboard/admin-dashboard.component";
 
 const routes: Routes = [
   {
-    path: 'access-denied',
-    component: AccessDeniedComponent,
+    path: '',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+    data: { public: true }
+  },
+  {
+    path: 'home',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
+  {
+    path: 'user-dashboard',
+    component: UserDashboardComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin',
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: AdminDashboardComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['admin'] }
+      }
+    ]
   },
   {
     path: 'user-info',
@@ -17,6 +47,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     // The user need to have these roles to access page
     data: { roles: ['user'] }
+  },
+  {
+    path: 'access-denied',
+    component: AccessDeniedComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

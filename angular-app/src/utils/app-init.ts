@@ -18,17 +18,10 @@ export function initializer(keycloak: KeycloakService): () => Promise<any> {
             //   We have two options : 'login-required'|'check-sso'
             //   If is set to 'login-required' this means your browser will do a full redirect to the Keycloak server and back to your application.
             //   If is set to  'check-sso'  instead this action will be performed in a hidden iframe, so your application resources only need to be loaded and parsed once by the browser.
-            //   Then you will need to add the silentCheckSsoRedirectUri and create a html file   silent-check-sso.html with this content
-            // <html>
-            //    <body>
-            //         <script>
-            //           parent.postMessage(location.href, location.origin);
-            //         </script>
-            //      </body>
-            // </html>
-            onLoad: 'login-required',
+            //   Using 'check-sso' allows public pages to be accessed without forcing authentication
+            onLoad: 'check-sso',
             checkLoginIframe: true,
-            // silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+            silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
           },
           // By default, the keycloak-angular library add 'Authorization: Bearer TOKEN' header to all http requests
           // Add here if u want to exclude urls (to not have that header)

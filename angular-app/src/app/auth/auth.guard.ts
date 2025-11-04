@@ -16,6 +16,12 @@ export class AuthGuard extends KeycloakAuthGuard {
 
   public async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
+    // Check if route is public (no authentication required)
+    const isPublic = route.data['public'];
+    if (isPublic) {
+      return true;
+    }
+
     // If not logged, redirect to login page
     if (!this.authenticated) {
       await this.keycloak.login({

@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>User Dashboard</h1>
+    <p class="welcome-text">Welcome, {{ username }}!</p>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="info-card">
+      <h2>Your Information</h2>
+      <div class="info-item">
+        <span class="label">Username:</span>
+        <span class="value">{{ username }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Roles:</span>
+        <span class="value">{{ userRoles.join(', ') }}</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Protected Content</h2>
+      <p>This page is only accessible to authenticated users.</p>
+      <p>You have successfully logged in and can access user-level features.</p>
+    </div>
+
+    <div class="info-card">
+      <h2>Available Actions</h2>
+      <ul class="action-list">
+        <li>View your profile information</li>
+        <li>Access user-level resources</li>
+        <li>Update your preferences</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dashboard-footer">
+    <button class="btn-logout" (click)="logout()">Logout</button>
+  </div>
+</div>

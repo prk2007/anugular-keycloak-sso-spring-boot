@@ -1,0 +1,42 @@
+<div class="home-container">
+  <div class="hero-section">
+    <h1>Welcome to Our Application</h1>
+    <p class="subtitle">A secure application built with Spring Boot, Keycloak, and Angular</p>
+
+    <div class="info-section">
+      <h2>Public Homepage</h2>
+      <p>This is a public page accessible to everyone without authentication.</p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <h3>Secure Authentication</h3>
+          <p>Powered by Keycloak OAuth2/OIDC</p>
+        </div>
+        <div class="feature-item">
+          <h3>Role-Based Access</h3>
+          <p>Different access levels for users and admins</p>
+        </div>
+        <div class="feature-item">
+          <h3>Modern Stack</h3>
+          <p>Angular 14 + Spring Boot + PostgreSQL</p>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <ng-container *ngIf="!isAuthenticated">
+          <p>Ready to get started?</p>
+          <button class="btn-primary" (click)="navigateToLogin()">
+            Login to Continue
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="isAuthenticated">
+          <p>Welcome back! You're already logged in.</p>
+          <button class="btn-primary" (click)="navigateToDashboard()">
+            Go to Dashboard
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="admin-dashboard-container">
+  <div class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <p class="welcome-text">Welcome, {{ username }} (Administrator)</p>
+  </div>
+
+  <div class="admin-content">
+    <div class="admin-card">
+      <h2>Administrator Information</h2>
+      <div class="info-item">
+        <span class="label">Username:</span>
+        <span class="value">{{ username }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Roles:</span>
+        <span class="value">{{ userRoles.join(', ') }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Access Level:</span>
+        <span class="value badge-admin">Administrator</span>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h2>Admin Privileges</h2>
+      <p>This page is only accessible to users with the <strong>admin</strong> role.</p>
+      <p>As an administrator, you have elevated permissions to manage the system.</p>
+    </div>
+
+    <div class="admin-card">
+      <h2>Administrative Actions</h2>
+      <ul class="admin-action-list">
+        <li>
+          <span class="action-icon">👥</span>
+          <span>Manage Users</span>
+        </li>
+        <li>
+          <span class="action-icon">🔐</span>
+          <span>Configure Security Settings</span>
+        </li>
+        <li>
+          <span class="action-icon">📊</span>
+          <span>View System Analytics</span>
+        </li>
+        <li>
+          <span class="action-icon">⚙️</span>
+          <span>System Configuration</span>
+        </li>
+        <li>
+          <span class="action-icon">📝</span>
+          <span>Audit Logs</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="admin-card warning-card">
+      <h2>⚠️ Important Notice</h2>
+      <p>You are accessing administrative functions. Please exercise caution when making changes to the system.</p>
+    </div>
+  </div>
+
+  <div class="admin-footer">
+    <button class="btn-logout" (click)="logout()">Logout</button>
+  </div>
+</div>

@@ -1,1 +1,92 @@
-<p>Username: {{ message }}</p>
+<div class="user-info-container">
+  <div class="page-header">
+    <h1>User Information & Claims</h1>
+    <p class="subtitle">Detailed view of your Keycloak user profile and JWT token claims</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading user information...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !error" class="content-grid">
+
+    <!-- Basic Information -->
+    <div class="info-card">
+      <h2>Basic Information</h2>
+      <div class="info-row">
+        <span class="label">Username:</span>
+        <span class="value">{{ username }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ userProfile?.email || 'N/A' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">First Name:</span>
+        <span class="value">{{ userProfile?.firstName || 'N/A' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Last Name:</span>
+        <span class="value">{{ userProfile?.lastName || 'N/A' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Email Verified:</span>
+        <span class="value badge" [class.badge-success]="userProfile?.emailVerified" [class.badge-warning]="!userProfile?.emailVerified">
+          {{ userProfile?.emailVerified ? 'Yes' : 'No' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Roles & Permissions -->
+    <div class="info-card">
+      <h2>Roles & Permissions</h2>
+      <div class="info-row">
+        <span class="label">Assigned Roles:</span>
+      </div>
+      <div class="roles-list">
+        <span *ngFor="let role of userRoles" class="role-badge">{{ role }}</span>
+        <span *ngIf="userRoles.length === 0" class="no-roles">No roles assigned</span>
+      </div>
+    </div>
+
+    <!-- Backend Response -->
+    <div class="info-card" *ngIf="backendMessage">
+      <h2>Backend API Response</h2>
+      <div class="backend-response">
+        <p>{{ backendMessage }}</p>
+      </div>
+    </div>
+
+    <!-- JWT Token Claims -->
+    <div class="info-card full-width">
+      <h2>JWT Token Claims</h2>
+      <div class="claims-table">
+        <div class="claim-row" *ngFor="let claim of getTokenClaims()">
+          <div class="claim-key">{{ claim.key }}</div>
+          <div class="claim-value">
+            <pre *ngIf="claim.value.includes('{') || claim.value.includes('[')">{{ claim.value }}</pre>
+            <span *ngIf="!claim.value.includes('{') && !claim.value.includes('[')">{{ claim.value }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Profile (Keycloak) -->
+    <div class="info-card full-width" *ngIf="userProfile">
+      <h2>Complete User Profile</h2>
+      <div class="json-display">
+        <pre>{{ userProfile | json }}</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <button class="btn-secondary" routerLink="/user-dashboard">Back to Dashboard</button>
+    <button class="btn-logout" (click)="logout()">Logout</button>
+  </div>
+</div>

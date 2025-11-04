@@ -8,12 +8,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import {HttpClientModule} from "@angular/common/http";
+import { HomeComponent } from './home/home.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccessDeniedComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    HomeComponent,
+    UserDashboardComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
