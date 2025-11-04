@@ -1,13 +1,179 @@
-# Getting Started
+# Spring Boot + Keycloak + Angular SSO Application
 
-## Overview
-* Keycloak version: 20.0
+A full-stack application demonstrating **Single Sign-On (SSO)** authentication using Keycloak, with role-based access control and Docker containerization.
 
-## Useful links
+## 🚀 Quick Start with Docker
+
+### Prerequisites
+- Docker and Docker Compose installed
+- Ports 4200, 8080, 8081, 5432, and 81 available
+
+### Run the Application
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:prk2007/anugular-keycloal-sso-spring-boot.git
+   cd springboot-keycloak-angular
+   ```
+
+2. **Start all services with Docker Compose**
+   ```bash
+   docker compose up -d
+   ```
+
+   This will start:
+   - **PostgreSQL** (port 5432) - Database
+   - **pgAdmin** (port 81) - Database management UI
+   - **Keycloak** (port 8081) - Identity provider
+   - **Spring Boot** (port 8080) - Backend API
+   - **Angular** (port 4200) - Frontend application
+
+3. **Wait for services to be ready** (approximately 60 seconds)
+   ```bash
+   # Check service status
+   docker compose ps
+
+   # Check Spring Boot logs
+   docker logs spring-app
+   ```
+
+4. **Access the application**
+   - **Frontend**: http://localhost:4200
+   - **Backend API**: http://localhost:8080
+   - **Keycloak Admin**: http://localhost:8081 (admin/admin)
+   - **pgAdmin**: http://localhost:81 (admin@admin.com/admin)
+
+### Configure Keycloak (Required for first run)
+
+1. **Login to Keycloak Admin Console**: http://localhost:8081
+   - Username: `admin`
+   - Password: `admin`
+
+2. **Select the `master` realm** (top-left dropdown)
+
+3. **Configure the Angular client**:
+   - Go to **Clients** → **bds-application**
+   - Add to **Valid Redirect URIs**: `http://localhost:4200/*`
+   - Add to **Web Origins**: `http://localhost:4200`
+   - Click **Save**
+
+4. **Create realm roles**:
+   - Go to **Realm roles** → **Create role**
+   - Create role: `user`
+   - Create role: `admin`
+
+5. **Create a test user**:
+   - Go to **Users** → **Add user**
+   - Set username, email, email verified
+   - Click **Create**
+   - Go to **Credentials** tab → **Set password**
+   - Uncheck **Temporary** → **Save**
+   - Go to **Role mapping** tab → **Assign role**
+   - Assign roles: `user` (and optionally `admin`)
+
+### Stop the Application
+```bash
+docker compose down
+
+# To remove volumes as well
+docker compose down -v
+```
+
+## 📋 Application Features
+
+### Three-Tier Access Control
+- **Public Homepage** (`/`) - Accessible without authentication
+- **User Dashboard** (`/user-dashboard`) - Requires authentication
+- **Admin Dashboard** (`/admin/dashboard`) - Requires `admin` role
+- **User Info** (`/user-info`) - Requires `user` role, displays JWT claims
+
+### Authentication Features
+- Single Sign-On (SSO) with Keycloak
+- Role-based access control (RBAC)
+- JWT token authentication
+- Conditional login/logout buttons
+- Automatic token refresh
+
+## 🛠️ Development Setup
+
+### Running Services Individually
+
+#### 1. Start Infrastructure (PostgreSQL + Keycloak)
+```bash
+docker compose up -d postgres keycloak pgadmin
+```
+
+#### 2. Run Spring Boot Backend
+```bash
+cd spring-app
+mvn spring-boot:run
+```
+
+#### 3. Run Angular Frontend (Development Mode)
+```bash
+cd angular-app
+npm install
+npm start
+```
+Access at: http://localhost:4200 (with proxy to backend)
+
+### Rebuild Docker Images
+```bash
+# Rebuild all services
+docker compose up -d --build
+
+# Rebuild specific service
+docker compose up -d --build angular-app
+docker compose up -d --build spring-app
+```
+
+## 📁 Project Structure
+
+```
+springboot-keycloak-angular/
+├── angular-app/               # Angular 14 frontend
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── home/          # Public homepage
+│   │   │   ├── user-dashboard/
+│   │   │   ├── admin-dashboard/
+│   │   │   ├── user-info/     # JWT claims display
+│   │   │   ├── auth/          # Auth guard & service
+│   │   │   └── api/           # Backend API service
+│   │   ├── environments/      # Configuration
+│   │   └── utils/             # Keycloak init
+│   ├── nginx.conf             # Production nginx config
+│   └── Dockerfile
+├── spring-app/                # Spring Boot backend
+│   ├── src/main/
+│   │   ├── java/
+│   │   │   └── com/example/springapp/
+│   │   │       ├── controller/
+│   │   │       ├── entity/
+│   │   │       ├── repository/
+│   │   │       ├── security/  # JWT & Keycloak config
+│   │   │       └── service/
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       └── application-docker.properties
+│   └── Dockerfile
+├── docker-compose.yml         # All services orchestration
+├── init-db.sql               # Database initialization
+└── README.md
+```
+
+## 🔧 Technology Stack
+
+- **Frontend**: Angular 14, TypeScript, keycloak-angular
+- **Backend**: Spring Boot 2.7.5, Spring Security, OAuth2 Resource Server
+- **Identity Provider**: Keycloak 20.0.0
+- **Database**: PostgreSQL 14.4
+- **Containerization**: Docker, Docker Compose
+- **Web Server**: Nginx (production)
+
+## 📚 Useful Links
 * [Setting up keycloack with spring boot](https://www.baeldung.com/spring-boot-keycloak)
 * [Secure Spring Boot + Angular 9 Application using KeyCloak(1/3)](https://medium.com/@kamleshbadgujar00/secure-spring-boot-angular-9-application-using-keycloak-1-3-b00e801ba693)
-  * [Github - Backend (Spring Boot)](https://github.com/kamleshbadgujar/heroes-backend)
-  * [Github - Frontend (Angular)](https://github.com/kamleshbadgujar/heroes-app)
 
 # Tutorial
 
