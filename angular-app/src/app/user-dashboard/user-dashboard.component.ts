@@ -116,6 +116,18 @@ export class UserDashboardComponent implements OnInit {
       .join(' ');
   }
 
+  // Get client roles in a type-safe way
+  getClientRoles(): Array<{clientId: string, roles: string[]}> {
+    if (!this.tokenClaims?.resource_access) {
+      return [];
+    }
+
+    return Object.keys(this.tokenClaims.resource_access).map(clientId => ({
+      clientId: clientId,
+      roles: this.tokenClaims.resource_access[clientId].roles || []
+    }));
+  }
+
   // Copy token to clipboard
   copyToken(): void {
     navigator.clipboard.writeText(this.accessToken).then(() => {

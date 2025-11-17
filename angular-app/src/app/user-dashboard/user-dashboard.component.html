@@ -83,16 +83,16 @@
       <h2>Client Roles</h2>
       <p class="card-description">Roles assigned to specific clients</p>
 
-      <div *ngFor="let client of tokenClaims.resource_access | keyvalue" class="client-roles">
-        <h3>{{ client.key }}</h3>
+      <div *ngFor="let client of getClientRoles()" class="client-roles">
+        <h3>{{ client.clientId }}</h3>
         <div class="roles-container">
-          <span class="role-badge" *ngFor="let role of client.value.roles">
+          <span class="role-badge" *ngFor="let role of client.roles">
             {{ role }}
           </span>
         </div>
       </div>
 
-      <div *ngIf="(tokenClaims.resource_access | keyvalue).length === 0" class="no-data">
+      <div *ngIf="getClientRoles().length === 0" class="no-data">
         No client roles assigned
       </div>
     </div>
