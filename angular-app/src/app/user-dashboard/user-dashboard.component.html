@@ -4,33 +4,110 @@
     <p class="welcome-text">Welcome, {{ username }}!</p>
   </div>
 
-  <div class="dashboard-content">
-    <div class="info-card">
-      <h2>Your Information</h2>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <p>Loading user information...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-container">
+    <p class="error-message">Error: {{ error }}</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error" class="dashboard-content">
+
+    <!-- Quick Summary -->
+    <div class="info-card summary-card">
+      <h2>Quick Summary</h2>
       <div class="info-item">
         <span class="label">Username:</span>
         <span class="value">{{ username }}</span>
       </div>
       <div class="info-item">
         <span class="label">Roles:</span>
-        <span class="value">{{ userRoles.join(', ') }}</span>
+        <span class="value">
+          <span class="role-badge" *ngFor="let role of userRoles">{{ role }}</span>
+        </span>
+      </div>
+      <div class="info-item" *ngIf="tokenExpiry">
+        <span class="label">Token Expires:</span>
+        <span class="value">{{ tokenExpiry | date:'medium' }}</span>
       </div>
     </div>
 
-    <div class="info-card">
-      <h2>Protected Content</h2>
-      <p>This page is only accessible to authenticated users.</p>
-      <p>You have successfully logged in and can access user-level features.</p>
+    <!-- User Profile from UserInfo Endpoint -->
+    <div class="info-card" *ngIf="userProfile">
+      <h2>User Profile (from /userinfo endpoint)</h2>
+      <p class="card-description">Information retrieved from Keycloak's userinfo endpoint</p>
+
+      <div class="claims-grid">
+        <div class="info-item" *ngFor="let entry of getUserProfileEntries()">
+          <span class="label">{{ formatKeyName(entry.key) }}:</span>
+          <span class="value" [class.value-object]="entry.value.includes('{')">{{ entry.value }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="getUserProfileEntries().length === 0" class="no-data">
+        No profile information available
+      </div>
     </div>
 
-    <div class="info-card">
-      <h2>Available Actions</h2>
-      <ul class="action-list">
-        <li>View your profile information</li>
-        <li>Access user-level resources</li>
-        <li>Update your preferences</li>
-      </ul>
+    <!-- Token Claims -->
+    <div class="info-card" *ngIf="tokenClaims">
+      <h2>Access Token Claims</h2>
+      <p class="card-description">All claims from the decoded JWT access token</p>
+
+      <div class="claims-grid">
+        <div class="info-item" *ngFor="let entry of getTokenClaimsEntries()">
+          <span class="label">{{ formatKeyName(entry.key) }}:</span>
+          <span class="value" [class.value-object]="entry.value.includes('{')">{{ entry.value }}</span>
+        </div>
+      </div>
     </div>
+
+    <!-- Realm Roles -->
+    <div class="info-card" *ngIf="tokenClaims?.realm_access?.roles">
+      <h2>Realm Roles</h2>
+      <p class="card-description">Roles assigned in the Keycloak realm</p>
+
+      <div class="roles-container">
+        <span class="role-badge" *ngFor="let role of tokenClaims.realm_access.roles">
+          {{ role }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Resource/Client Roles -->
+    <div class="info-card" *ngIf="tokenClaims?.resource_access">
+      <h2>Client Roles</h2>
+      <p class="card-description">Roles assigned to specific clients</p>
+
+      <div *ngFor="let client of tokenClaims.resource_access | keyvalue" class="client-roles">
+        <h3>{{ client.key }}</h3>
+        <div class="roles-container">
+          <span class="role-badge" *ngFor="let role of client.value.roles">
+            {{ role }}
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="(tokenClaims.resource_access | keyvalue).length === 0" class="no-data">
+        No client roles assigned
+      </div>
+    </div>
+
+    <!-- Access Token -->
+    <div class="info-card">
+      <h2>Access Token (JWT)</h2>
+      <p class="card-description">Raw JWT access token</p>
+
+      <div class="token-container">
+        <textarea readonly class="token-display">{{ accessToken }}</textarea>
+        <button class="btn-copy" (click)="copyToken()">Copy Token</button>
+      </div>
+    </div>
+
   </div>
 
   <div class="dashboard-footer">

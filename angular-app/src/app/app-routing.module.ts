@@ -11,9 +11,8 @@ import {AdminDashboardComponent} from "./admin-dashboard/admin-dashboard.compone
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    canActivate: [AuthGuard],
-    data: { public: true }
+    component: HomeComponent
+    // No guard needed - with login-required, user is always authenticated
   },
   {
     path: 'home',
@@ -51,7 +50,8 @@ const routes: Routes = [
   {
     path: 'access-denied',
     component: AccessDeniedComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { public: true }  // Public so users can see the error without re-auth
   }
 ];
 

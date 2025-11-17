@@ -15,18 +15,24 @@ export class AuthGuard extends KeycloakAuthGuard {
   }
 
   public async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    console.log('🔶 [AuthGuard] Called for route:', state.url);
+    console.log('🔶 [AuthGuard] Authenticated:', this.authenticated);
+    console.log('🔶 [AuthGuard] Route data:', route.data);
 
-    // Check if route is public (no authentication required)
+    // Check if route is public FIRST (no authentication required)
     const isPublic = route.data['public'];
     if (isPublic) {
+      console.log('✅ [AuthGuard] Public route, allowing access');
       return true;
     }
 
-    // If not logged, redirect to login page
+    // Force user to log in if they were not authenticated
     if (!this.authenticated) {
+      console.log('🔴 [AuthGuard] Not authenticated, redirecting to login...');
       await this.keycloak.login({
         redirectUri: window.location.origin + state.url
       });
+      return false;
     }
 
     // Get the roles from keycloak

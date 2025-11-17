@@ -1,5 +1,5 @@
 .dashboard-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -23,6 +23,21 @@
   opacity: 0.9;
 }
 
+/* Loading and Error States */
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.error-message {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
 .dashboard-content {
   display: grid;
   gap: 20px;
@@ -34,48 +49,163 @@
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .info-card h2 {
   color: #333;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-size: 1.5rem;
   border-bottom: 2px solid #667eea;
   padding-bottom: 10px;
 }
 
+.info-card h3 {
+  color: #555;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.card-description {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* Summary Card */
+.summary-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-left: 5px solid #667eea;
+}
+
+/* Claims Grid */
+.claims-grid {
+  display: grid;
+  gap: 10px;
+}
+
 .info-item {
   display: flex;
-  margin-bottom: 15px;
-  padding: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 12px;
   background: #f8f9fa;
   border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.info-item:hover {
+  background: #e9ecef;
 }
 
 .info-item .label {
   font-weight: bold;
   color: #555;
-  min-width: 120px;
+  min-width: 200px;
+  flex-shrink: 0;
 }
 
 .info-item .value {
   color: #333;
+  flex: 1;
+  word-break: break-word;
 }
 
-.action-list {
-  list-style: none;
-  padding: 0;
-}
-
-.action-list li {
+.value-object {
+  font-family: 'Courier New', monospace;
+  background: #282c34;
+  color: #61dafb;
   padding: 10px;
-  margin-bottom: 8px;
-  background: #f8f9fa;
-  border-left: 4px solid #667eea;
   border-radius: 4px;
+  white-space: pre-wrap;
+  display: block;
+  margin-top: 5px;
+  font-size: 0.85rem;
 }
 
+/* Role Badges */
+.roles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.role-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Client Roles */
+.client-roles {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.client-roles h3 {
+  margin-top: 0;
+  color: #667eea;
+}
+
+/* Token Display */
+.token-container {
+  position: relative;
+}
+
+.token-display {
+  width: 100%;
+  min-height: 150px;
+  padding: 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  background: #282c34;
+  color: #61dafb;
+  border: 1px solid #444;
+  border-radius: 6px;
+  resize: vertical;
+  word-break: break-all;
+}
+
+.btn-copy {
+  margin-top: 10px;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-copy:hover {
+  background-color: #764ba2;
+}
+
+/* No Data Message */
+.no-data {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+/* Footer */
 .dashboard-footer {
   text-align: center;
   padding: 20px;
@@ -94,4 +224,20 @@
 
 .btn-logout:hover {
   background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .info-item {
+    flex-direction: column;
+  }
+
+  .info-item .label {
+    min-width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
 }
